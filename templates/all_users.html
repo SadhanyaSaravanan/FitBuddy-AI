@@ -1,0 +1,67 @@
+{% extends "base.html" %}
+
+{% block title %}
+All FitBuddy Users
+{% endblock %}
+
+{% block content %}
+
+<div class="card">
+
+    <h2>All Users</h2>
+
+    {% if users %}
+
+    <div class="table-container">
+
+        <table>
+
+            <thead>
+
+                <tr>
+                    <th>ID</th>
+                    <th>Name</th>
+                    <th>Age</th>
+                    <th>Weight</th>
+                    <th>Goal</th>
+                    <th>Intensity</th>
+                    <th>Experience</th>
+                </tr>
+
+            </thead>
+
+            <tbody>
+
+                {% for user in users %}
+
+                <tr>
+                    <td>{{ user.user_id }}</td>
+                    <td>{{ user.name }}</td>
+                    <td>{{ user.age }}</td>
+                    <td>{{ user.weight_kg }} kg</td>
+                    <td>{{ user.goal }}</td>
+                    <td>{{ user.intensity }}</td>
+                    <td>{{ user.experience }}</td>
+                </tr>
+
+                {% endfor %}
+
+            </tbody>
+
+        </table>
+
+    </div>
+
+    {% else %}
+
+    <p>No users found.</p>
+
+    {% endif %}
+
+    <a href="/" class="button">
+        Back to Home
+    </a>
+
+</div>
+
+{% endblock %}
