@@ -1,0 +1,215 @@
+{% extends "base.html" %}
+
+{% block title %}
+Your FitBuddy Plan
+{% endblock %}
+
+{% block content %}
+
+<div class="card">
+
+    <h2>{{ plan.title }}</h2>
+
+    <div class="user-info">
+        <h3>Your Information</h3>
+
+        <p><strong>Name:</strong> {{ user.name }}</p>
+        <p><strong>User ID:</strong> {{ user.user_id }}</p>
+        <p><strong>Age:</strong> {{ user.age }}</p>
+        <p><strong>Weight:</strong> {{ user.weight_kg }} kg</p>
+        <p><strong>Goal:</strong> {{ user.goal }}</p>
+        <p><strong>Intensity:</strong> {{ user.intensity }}</p>
+        <p><strong>Experience:</strong> {{ user.experience }}</p>
+    </div>
+
+    <h3>Overview</h3>
+
+    <p>{{ plan.overview }}</p>
+
+
+    <h2>7-Day Workout Plan</h2>
+
+    {% for day in plan.days %}
+
+    <div class="day-card">
+
+        <h3>{{ day.day }} - {{ day.focus }}</h3>
+
+        <p>
+            <strong>Warm-up:</strong>
+            {{ day.warmup }}
+        </p>
+
+        <h4>Exercises</h4>
+
+        <ul>
+
+            {% for exercise in day.exercises %}
+
+            <li>
+
+                <strong>{{ exercise.name }}</strong>
+
+                {% if exercise.sets %}
+                    — {{ exercise.sets }} sets
+                {% endif %}
+
+                {% if exercise.reps %}
+                    × {{ exercise.reps }} reps
+                {% endif %}
+
+                {% if exercise.duration_minutes %}
+                    — {{ exercise.duration_minutes }} minutes
+                {% endif %}
+
+                {% if exercise.rest_seconds %}
+                    — Rest: {{ exercise.rest_seconds }} sec
+                {% endif %}
+
+                {% if exercise.notes %}
+                    <br>
+                    <small>{{ exercise.notes }}</small>
+                {% endif %}
+
+            </li>
+
+            {% endfor %}
+
+        </ul>
+
+        <p>
+            <strong>Cooldown:</strong>
+            {{ day.cooldown }}
+        </p>
+
+        <p>
+            <strong>Recovery:</strong>
+            {{ day.recovery_tip }}
+        </p>
+
+    </div>
+
+    {% endfor %}
+
+
+    <div class="nutrition">
+
+        <h2>Nutrition Tip</h2>
+
+        {% if nutrition is mapping %}
+
+            <h3>{{ nutrition.tip }}</h3>
+
+            <p>{{ nutrition.rationale }}</p>
+
+            <ul>
+                {% for action in nutrition.practical_actions %}
+                    <li>{{ action }}</li>
+                {% endfor %}
+            </ul>
+
+        {% else %}
+
+            <h3>{{ nutrition.tip }}</h3>
+            <p>{{ nutrition.rationale }}</p>
+
+            <ul>
+                {% for action in nutrition.practical_actions %}
+                    <li>{{ action }}</li>
+                {% endfor %}
+            </ul>
+
+        {% endif %}
+
+    </div>
+
+
+    {% if updated %}
+
+    <div class="updated-plan">
+
+        <h2>Updated Workout Plan</h2>
+
+        <p>
+            Your plan was updated based on:
+        </p>
+
+        <blockquote>
+            {{ feedback }}
+        </blockquote>
+
+        {% for day in updated_plan.days %}
+
+        <div class="day-card">
+
+            <h3>{{ day.day }} - {{ day.focus }}</h3>
+
+            <p>{{ day.warmup }}</p>
+
+            <ul>
+
+                {% for exercise in day.exercises %}
+
+                <li>
+                    <strong>{{ exercise.name }}</strong>
+
+                    {% if exercise.sets %}
+                        — {{ exercise.sets }} sets
+                    {% endif %}
+
+                    {% if exercise.reps %}
+                        × {{ exercise.reps }}
+                    {% endif %}
+
+                    {% if exercise.duration_minutes %}
+                        — {{ exercise.duration_minutes }} minutes
+                    {% endif %}
+                </li>
+
+                {% endfor %}
+
+            </ul>
+
+        </div>
+
+        {% endfor %}
+
+    </div>
+
+    {% endif %}
+
+
+    <div class="feedback">
+
+        <h2>Improve Your Plan</h2>
+
+        <form action="/submit-feedback" method="post">
+
+            <input
+                type="hidden"
+                name="user_id"
+                value="{{ user.user_id }}"
+            >
+
+            <textarea
+                name="feedback"
+                placeholder="Example: Add more cardio or reduce workout difficulty"
+                required
+            ></textarea>
+
+            <button type="submit">
+                Update My Plan
+            </button>
+
+        </form>
+
+    </div>
+
+
+    <a href="/" class="button">
+        Create Another Plan
+    </a>
+
+</div>
+
+{% endblock %}
